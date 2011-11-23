@@ -1,0 +1,26 @@
+.page-header
+  h1 Welcome, &nbsp;
+    span.settings
+      span.user-name 
+        | Untitled
+      input.user-name-edit(style='display: none', type='text')
+    small &nbsp; Click to edit name
+.row
+  .span9
+    h2 Add steps
+    section#steps
+      section.step-items
+      form(action="javascript: false;")
+        label(for='new-step-title') Title next step
+        input(type='text',name='new-step-title').new-step
+  .span3
+    h3 Secondary
+    
+script#step-item(type='text/template')
+
+  section.step
+    header
+      h2.title 
+        span step {{item.id}}
+        |  {{item.title}}
+      input.edit-title(style='display: none')

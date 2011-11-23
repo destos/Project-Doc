@@ -11,6 +11,7 @@
   "scripts": {
     "start": "coffee -o lib/ -cw libsrc/ & nodemon lib/server.js",
     "debug": "coffee -o lib/ -cw libsrc/ & nodemon lib/server.js --debug port 5858",
+    "compile": "coffee -o lib/ -cw libsrc/",
     "test": "expresso"
   },
   "engines": {

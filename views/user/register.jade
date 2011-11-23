@@ -1,0 +1,25 @@
+.page-header
+  h2 Register
+.row
+  .span9
+    - if ( 'undefined' !== typeof errors && errors.length )
+      ul#errors
+        - each error in errors
+          li.error= error
+    form(action='/register', method='post')
+      fieldset
+        .clearfix
+          label(for=everyauth.password.loginFormFieldName) Email 
+          .input
+            input(type='text', name=everyauth.password.loginFormFieldName)
+        .clearfix
+          label(for=everyauth.password.passwordFormFieldName) Password
+          .input
+            input(type='password', name=everyauth.password.passwordFormFieldName)
+        .actions
+          input(type='submit', value='Register').btn.primary
+          \&nbsp;
+          input(type='reset', value='cancel').btn
+  .span3
+    h3 Tips
+    p none

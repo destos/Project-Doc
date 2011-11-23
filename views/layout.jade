@@ -1,16 +1,17 @@
 !!!5
 html
   head
+    -var title = title || 'wut'
     title= title
     script(src='/js/lib/jquery-1.6.2.js')
     script(src='/js/lib/console-dummy.js')
     script(src='/js/lib/underscore.js')
-    script(src='/js/lib/backbone-debug-0.5.3.js')
-    script(src='/socket.io/socket.io.js')
-    script(src='/js/module.js')
-    script(src='/skull.io/skull.io.js')
+    // script(src='/js/lib/backbone-debug-0.5.3.js')
+    // script(src='/socket.io/socket.io.js')
+    // script(src='/js/module.js')
+    // script(src='/skull.io/skull.io.js')
     script(src='/js/bs/bootstrap-dropdown.js')
-    script(src='/js/app.js')
+    // script(src='/js/app.js')
     link( href="/css/basics.css", rel="stylesheet")
   body
     header.topbar
@@ -28,56 +29,45 @@ html
               a(href="/tools") Tools
             li.d
           ul.nav.secondary-nav
-            -if(!session.auth)
+            -if( !auth.loggedIn )
               li.dropdown(data-dropdown="login")
                 a.dropdown-toggle(href="#") Login
-                ul.dropdown-menu
+                ul.dropdown-menu.login-register
                   li
-                    a(href="/auth/twitter") with Twitter
-                    a(href="/auth/facebook") with Facebook
-                    a(href="/auth/github") with Github
+                    a(href="/auth/twitter")
+                      img(src="//twitter.com/favicon.ico")
+                      | with Twitter
+                    //- a(href="/auth/facebook")
+                      //- img(src="//facebook.com/favicon.ico")
+                      //- | with Facebook
+                  li
+                    a(href="/auth/github")
+                      img(src="//github.com/favicon.ico")
+                      | with Github
+                  li
+                    a(href="/login") with User/Pass
                   li.divider
                   li
                     a(href="/register") Register Account
             -else
               li.dropdown.account(data-dropdown="account")
                 a.dropdown-toggle.user-photo(href="#")
-                  img(src=session.user.image)
-                  = session.user.name 
+                  -if(session.user.image)
+                    img(src=session.user.image)
+                  = session.user.name || 'no name'
                 ul.dropdown-menu
                   li
                     a(href="/settings") Settings
                   li
                     a(href="/myProjects") Projects
                   li
+                    a(href="/project/new") New Project
+                  li
                     a(href="/logout") Logout
                   
+    
     section.container
       .content
-        .page-header
-          h1 Welcome, &nbsp;
-            span.settings
-              span.user-name 
-                | Untitled
-              input.user-name-edit(style='display: none', type='text')
-            small &nbsp; Click to edit name
-        .row
-          .span9
-            h2 Add steps
-            section#steps
-              section.step-items
-              form(action="javascript: false;")
-                label(for='new-step-title') Title next step
-                input(type='text',name='new-step-title').new-step
-          .span3
-            h3 Secondary
+        != body
       footer
-        p &copy; someone
-
-script#step-item(type='text/template')
-  section.step
-    header
-      h2.title 
-        span step {{item.id}}
-        |  {{item.title}}
-      input.edit-title(style='display: none')
+        p &copy; Project Doc, or sumtin

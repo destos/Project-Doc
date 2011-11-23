@@ -31,8 +31,9 @@ app.configure( ->
     store: new SessionStore()
   })
   
+  # authentication middleware
   app.use auth.middleware()
-  # app.use auth.middleware.normalizeUserData()
+  app.use auth.normalizeUserData()
   
   app.use express.compiler(
     src: publicsrc
@@ -59,7 +60,10 @@ app.configure 'production', ->
   
 app.dynamicHelpers {
   session: (req, res) ->
-    return req.session;
+    console.log(req.session)
+    return req.session
+  auth: (req,res) ->
+    return req.session.auth || {}
 }
 
 app.get '/', (req, res) ->

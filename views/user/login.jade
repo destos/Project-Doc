@@ -1,0 +1,27 @@
+.page-header
+  h2 Login
+.row
+  .span9
+    - if ( 'undefined' !== typeof errors && errors.length )
+      ul#errors
+        - each error in errors
+          li.error= error
+    form(action='/login', method='post')
+      fieldset
+        .clearfix
+          label(for=everyauth.password.loginFormFieldName) Login 
+          .input
+            input(type='text', name=everyauth.password.loginFormFieldName, value=login)
+        .clearfix
+          label(for=everyauth.password.passwordFormFieldName) Password
+          .input
+            input(type='password', name=everyauth.password.passwordFormFieldName)
+        .actions
+          input(type='submit', value='Login').btn.primary
+          \&nbsp;
+          input(type='reset', value='cancel').btn
+  .span3
+    h3 Tips
+    p
+      :markdown
+        Don't have an account yet? [Register!](/register)
