@@ -1,8 +1,6 @@
 ####Requirements
 Skull = require 'Skull.io'
-io = require 'socket.io'
 _ = require 'underscore'
-express = require 'express'
 
 #### Step Model
 class StepModel extends Skull.Model
@@ -70,10 +68,13 @@ class exports.App
     
     @io = io.listen app
     
+    @io.configure =>
+      @io.set 'log level', 2
+    
     @io.set 'authorization', (data, cb) ->
       res = {}
       express.cookieParser() data, res, -> 
-        console.log 'Parsed cookies: %j', data.cookies
+        # console.log 'Parsed cookies: %j', data.cookies
         sid = data.cookies['connect.sid']
         return cb("Not authorized", false) if not sid
         console.log 'Authorized user ', sid

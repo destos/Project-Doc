@@ -1,0 +1,16 @@
+.page-header
+  h2 Projects
+.row
+  .span9
+    .browse stuff stuff stuff
+    -if(projects.length>=1)
+      each project in projects
+        .project
+          h3
+            a(href="/project/"+project.slug)
+              = project.name
+          p= project.created
+  .span3
+    h2 Create your own!
+    :markdown
+      Interested in documenting your own project? [Create your own right now!](/project/new)

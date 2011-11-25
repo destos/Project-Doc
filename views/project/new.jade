@@ -1,0 +1,21 @@
+.page-header
+  h2 Create a new project!
+.row
+  .span9
+    //- - if ( 'undefined' !== typeof errors && errors.length )
+    //-   ul#errors
+    //-     - each error in errors
+    //-       li.error= error
+    form(action='/project/new', method='post')
+      fieldset
+        .clearfix(class=(typeof errors.name !== 'undefined')?'error':'fine')
+          label(for='name') Name 
+          .input
+            input(type='text', name='name', value=fields.name)
+            - if ( typeof errors.name !== 'undefined' && typeof errors.name.message !== 'undefined' )
+              small.help-inline= errors.name.message
+        .actions
+          input(type='submit', value='Create Project').btn.primary
+          \&nbsp;
+          input(type='reset', value='cancel').btn
+  .span3
