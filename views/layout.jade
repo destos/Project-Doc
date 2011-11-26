@@ -29,7 +29,7 @@ html
               a(href="/tools") Tools
             li.d
           ul.nav.secondary-nav
-            -if( !auth.loggedIn )
+            -if( !everyauth.loggedIn )
               li.dropdown(data-dropdown="login")
                 a.dropdown-toggle(href="#") Login
                 ul.dropdown-menu.login-register
@@ -59,9 +59,10 @@ html
                   li
                     a(href="/settings") Settings
                   li
-                    a(href="/myProjects") Projects
+                    a(href="/projects") Projects
                   li
                     a(href="/project/new") New Project
+                  li.divider
                   li
                     a(href="/logout") Logout
                   

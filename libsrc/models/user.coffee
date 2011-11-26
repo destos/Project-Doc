@@ -9,7 +9,7 @@ exports.Schema = UserSchema = new Schema
     trim: true
   userName:
     type: String
-    required: true
+    required: false
     lowercase: true
     trim: true
     unique: true
@@ -18,31 +18,34 @@ exports.Schema = UserSchema = new Schema
     index: true
     default: Date.now
 
-exports.Model = User = mongoose.model 'User', UserSchema
+# TODO: allow plugins to be run on Schema before model is regsitered
 
-class exports.SkullModel extends Skull.Model
-  constructor: (@id) ->
-    @settings = 
-      id: 'user_' + @id
-      name: 'No name'
-      country: 'No country'
-      
-  read: (filter, callback, socket) ->
-    console.log 'Reading settings for user ', @id
-    callback null, @settings
-    
-  update: (data, callback, socket) ->
-    console.log 'Updating settings for user ', @id
-    @settings = data #don't do this. Always pluck the settings you need and validate them 
-    callback null, @settings
-    @emit 'update', @settings, socket
-    
-class UserSettings
-  settings: {} 
-  get: (sid) ->
-    existing = @settings[sid]
-    if not existing then existing = @settings[sid] = new UserSetting sid
-    existing
+exports.Model = () ->
+  mongoose.model 'User', UserSchema
+
+# class exports.SkullModel extends Skull.Model
+#   constructor: (@id) ->
+#     @settings = 
+#       id: 'user_' + @id
+#       name: 'No name'
+#       country: 'No country'
+#       
+#   read: (filter, callback, socket) ->
+#     console.log 'Reading settings for user ', @id
+#     callback null, @settings
+#     
+#   update: (data, callback, socket) ->
+#     console.log 'Updating settings for user ', @id
+#     @settings = data #don't do this. Always pluck the settings you need and validate them 
+#     callback null, @settings
+#     @emit 'update', @settings, socket
+#     
+# class UserSettings
+#   settings: {} 
+#   get: (sid) ->
+#     existing = @settings[sid]
+#     if not existing then existing = @settings[sid] = new UserSetting sid
+#     existing
 
 # class exports.App
 # 

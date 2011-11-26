@@ -1,13 +1,12 @@
 mongoose = require 'mongoose'
 https = require 'https'
 
-Schema = mongoose.Schema
+# Schema = mongoose.Schema
 mongooseAuth = require('mongoose-auth')
 
-UserSchema = new Schema
-  "registered":
-    "type" : Date
-    "index" : true
+UserObject = require('../models/user')
+# console.log(UserObject)
+
 
 module.exports = (app,config) ->
   
@@ -18,17 +17,17 @@ module.exports = (app,config) ->
   external = config.get 'auth'
   serverUri = config.get 'server:uri'
   
-  UserSchema.plugin mongooseAuth, 
+  UserObject.Schema.plugin mongooseAuth,
     debug: config.get 'debug'
     everymodule:
       everyauth:
         handleLogout: (req,res) ->
           delete req.session.user
           req.logout()
-          # res.redirect();
-          res.writeHead 303, 'Location': this.logoutRedirectPath()
+          res.redirect this.logoutRedirectPath(), 303 
           res.end()
         User: ->
+          # debugger
           User
     password:
       everyauth:
@@ -61,7 +60,10 @@ module.exports = (app,config) ->
         redirectPath: loginRedirect
     
     # TODO: implement facebook
-    
+  
+  # finilize schema and register model
+  User = UserObject.Model()
+  
   mongooseAuth.helpExpress app
   
   # Fetch and format data so we have an easy object with user data to work with.
@@ -102,9 +104,6 @@ module.exports = (app,config) ->
         req.session.user = user
          
       next()
-  
-  mongoose.model 'User', UserSchema
-  User = mongoose.model 'User'
   
   return{
     user: User

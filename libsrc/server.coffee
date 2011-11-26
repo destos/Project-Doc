@@ -20,8 +20,10 @@ publicsrc = root + '/publicsrc'
 Project = require './models/project'
 ProjectModel = Project.Model
 
-User = require './models/user'
-UserModel = User.Model
+# User = require './models/user'
+# UserModel = User.Model
+
+mongoose.set 'debug', config.get('debug')
 
 auth = require('./auth/mongo')(app,config)
 
@@ -69,8 +71,8 @@ app.dynamicHelpers {
   session: (req, res) ->
     # console.log(req.session)
     return req.session
-  auth: (req,res) ->
-    return req.session.auth || {}
+  # auth: (req,res) ->
+  #   return req.session.auth || {}
 }
 
 app.get '/', (req, res) ->
