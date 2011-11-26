@@ -1,8 +1,11 @@
 # working on mongo
+step = require 'step'
 
 mongoose = require 'mongoose'
 
-User = require './models/user'
+User = require('./models/user')
+UserModel = User.Model()
+
 Project = require './models/project'
 
 mongoose.connect('mongodb://localhost/proj-doc');
@@ -54,17 +57,49 @@ Array.prototype.random = ()->
 titleGenerator = new title
 # console.log(titleGenerator.generate())
 
-# add some projects
+createStep = (cb) ->
+  amount = [2...6].random()
+  parts = ( titleGenerator.generate() for num in [1...amount] )
+  newStep = new Project.StepModel
+    title: titleGenerator.generate()
+    parts: parts
+  newStep.save (err) ->
+    # console.log('step:',newStep)
+    cb(null,newStep)
+  return undefined
 
-for num in [1...10]
-  do (num) ->
-    name = titleGenerator.generate()
-    console.log('creating project with name:',name)
-    new Project.Model
-      name: name
-    .save (err)->
-      if !err
-        console.log('saved:',name)
-      else
-        console.log(err)
+# find a user
+UserModel.findOne().run (err,user)=>
+  # console.log(user)
+  if(!user or err)
+    throw new Error 'error getting user'
+  
+  # add some projects  
+  for num in [1...10]
+    do (num) ->
+      name = titleGenerator.generate()
+      console.log('creating project with name:',name)
+      step () ->
+        amount = [3...15].random()
+        stepGroup = @.group()
+        for num in [1...amount]
+          do ()=>
+            createStep(stepGroup())
+        return undefined
+      , (err,steps) ->
+        if(err)
+          console.log err
+        # console.log('steps:',steps)
+        # return;
+        new Project.Model
+          name: name
+          owner: user
+          steps: steps
+        .save (err)->
+          if !err
+            console.log('saved:',name)
+          else
+            console.log(err)
+      return undefined
+    return undefined
       

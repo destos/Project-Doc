@@ -2,6 +2,19 @@
   h2= project.name
 .row
   .span9
-    = project.date.created
+    time= project.date.created
+    p= project.owner.twit.name
+    p= project.description
+    //- loop through steps
+    -if( project.steps && project.steps.length >= 1 )
+      each step in project.steps
+        article(data-step-id=step._id)
+          h3= step.title
+          ul.parts
+            -if( step.parts && step.parts.length >= 1 )
+              each part in step.parts
+                li= part
+          
     //- = project.date.updated
   .span3
+  

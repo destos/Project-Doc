@@ -100,17 +100,34 @@ app.post '/project/new', (req,res) ->
     else
       res.redirect '/project/'+newProject.slug
 
-app.get '/project/:slug', (req,res) ->
-  ProjectModel.findOne {slug:req.params.slug}, (err,docs) ->
-    console.log(arguments);
-    if(err||docs == null)
-      console.log(err);
-      res.render 'project/none'
-    else
-      console.log(docs);
-      res.render 'project/single',
-        locals:
-          project: docs
+app.get '/project/:slug.:format?', (req,res) ->
+  
+  format = ( if req.params.format then req.params.format else 'html' ).replace(/[^a-z0-9]/g, '')
+  
+  render = (project) ->
+    res.render 'project/single',
+      locals:
+        title: project.name
+        project: project
+        
+  ProjectModel
+    .where('slug', req.params.slug)
+    .populate('owner', ['twit.name']) # only return name, works for twitter users currently
+    .populate('steps')
+    .findOne (err,project) ->
+      if(err or project == null)
+        console.error(err)
+        res.render 'project/none'
+      else
+        switch format
+          when 'json'
+            res.send project
+          when 'html'
+            render(project)
+          when 'xml'
+            res.send('<haha>no xml 4u!</haha>')
+          else
+            render(project)
 
 app.get '/projects', (req,res) ->
   ProjectModel.find {enabled: true}, (err,docs) ->
